@@ -1,0 +1,28 @@
+required_version is 0.1
+
+set bin_path as      "/usr/bin/"
+set output   as      "{bin_path}xss"
+
+set sudo     as      "sudo"
+set compiler as      "c++"
+set standard as std  "c++20"
+set xlib     as link "X11"
+
+set src      as      "src/"
+set sources  as      "{src}xss.cpp"
+
+for signal "start" [
+    for exists "{bin_path}clang++" [
+        set compiler as "clang++"
+    ]
+
+    for argument "install" [
+        use exec "{sudo} {compiler} {standard} {sources} -o {output} {xlib}"
+
+        for exists "{output}" [
+            println "Installed to {output}"
+        ]
+    ]
+
+    use signal "exit"
+]
